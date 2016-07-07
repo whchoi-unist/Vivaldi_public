@@ -18,7 +18,10 @@ from Vivaldi_memory_packages import Data_package
 import traceback
 import socket
 import time
-from hdfs import InsecureClient
+try:
+	from hdfs import InsecureClient
+except:
+	pass
 
 import os, sys
 VIVALDI_PATH = os.environ.get('vivaldi_path')

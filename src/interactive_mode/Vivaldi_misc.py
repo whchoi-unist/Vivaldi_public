@@ -3,8 +3,12 @@ import time, numpy, sys, copy, ast, os
 import getpass
 import socket
 from StringIO import StringIO
-from hdfs import InsecureClient
-import pycurl
+try:
+	from hdfs import InsecureClient
+	import pycurl
+except:
+	print "NO pycurl and pyhdfs"
+
 import Image
 
 class bcolors:
