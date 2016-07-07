@@ -1,0 +1,87 @@
+USAGE for Stack rendering Examples
+
+========================================================================
+ Common
+
+a. When the examples are executed, the applications ask for users to 
+select which Stack would be used. The list of Stacks from a file "FIRST".
+
+b. As this application uses data which locations of them are already 
+determined, please follow the directory hierarchy
+  
+
+
+ VIVALDI  ------    src    ----------  interactive_mode
+            |                   |
+            |                   -----  viewer_src
+            |                   |
+            |                   -----  translator
+            |
+            ----   data    ----------  david  -----------  Zebrafish
+            |                                      |
+            |                                      ------  ZBrain
+            |                                      |
+            |                                      ------  TF
+            |                                      |
+            |                                      ------  Mask
+			----   examples
+
+c. It comprises three types of rendering for each applications
+
+  (1) render 
+    Rendering EM and Stack using ray-casting. It uses pre-defined 
+   transfer function
+
+  (2) max_intensity_rendering
+    Rendering EM using alpha compositing and rendering stack using 
+   Maximum Intensity Projection
+
+  (3) separate rendering
+    Rendering EM (ray-casting) and Stack (Maximum Intensity Projection) 
+   individually, and combine it using blending
+
+
+------------------------------------------------------------------------
+
+1. rendering.vvl
+
+HOW TO USE
+
+vivaldi rendering.vvl [number for stack data : optional]
+
+# When the 'number for stack data' is given, it renders 360 degree
+ rotation for x axis
+
+------------------------------------------------------------------------
+
+2. rendering_viewer.vvl
+
+HOW TO USE
+
+vivaldi rendering_viewer.vvl
+
+
+# It serves viewer to control orientation, transfer function, and 
+ slider for optional usage.
+
+   (1) Orientation
+     Orientation of Object is controlled by mouse. A left button 
+    supports rotation, a right button supports scale of object. And
+    a middle button supports translation. (This controls are supported
+    on left widget, rendering widget)
+
+   (2) Transfer function
+     Examples supports transfer function on viewer. The right up side
+    of viewer represents the transfer function. Middle button supports
+    to choose the color, and right button dye a pallete. And diagonal 
+    line represents alpha (opacity) of a voxel value.
+
+   (3) Slider
+     When ` sld='SLIDER' ` is used in enable_viewer function in main, 
+    slider is enabled. The slider acts for the value, 'slider' and 
+    'slider1' in worker function. It assigned from 0 to 99, and users
+    can control the value interactively.
+
+
+
+

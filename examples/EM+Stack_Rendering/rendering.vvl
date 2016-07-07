@@ -233,6 +233,9 @@ def main():
 			import os
 			os.system("cp ~/mvmtx/1.tf ~/Project/Vivaldi/data/david/TF/%s.tf"%target_img)
 		
+		import os
+		if os.path.isdir('result/%s'%target_img) == False:
+			os.system('mkdir -p result/%s'%target_img)
 
 		start = int(start_end[:start_end.find('to')])
 		end   = int(start_end[start_end.find('to')+2:])
@@ -273,14 +276,17 @@ def main():
 
 		## original
 		#result = render(volume_ori, volume_mask, volume_brain, x, y, transf, transf1, start, end).range(x=-1024:1024, y=-1024:1024)
+		## ========
 
 		## Maximum Intensity using two path
 		result = max_intensity_rendering(volume_ori, volume_mask, volume_brain, x, y, transf, input_col, start, end).range(x=-1024:1024, y=-1024:1024)
+		## ========
 
 		## Maximum Intensity using two results
 		#fish_result = EM_rendering(volume_ori, x, y, transf).range(x=-1024:1024, y=-1024:1024)
 		#projection = max_intensity(volume_ori, volume_mask, volume_brain, x, y, transf, input_col, start, end).range(x=-1024:1024, y=-1024:1024)
 		#result = combine(fish_result, projection, x, y).range(x=-1024:1024,y=-1024:1024)
+		## ========
 
 		# Store EM volume rendering only
 		#save_image(fish_result, result_name_prefix%(today, target_img, elem+20))
@@ -289,5 +295,3 @@ def main():
 
 		save_image(result, result_name_prefix%(today, target_img, elem))
 
-	import os
-	os.system('send_telegram done')

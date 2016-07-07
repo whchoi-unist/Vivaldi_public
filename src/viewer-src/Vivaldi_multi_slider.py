@@ -14,13 +14,13 @@ class multi_slider(QtGui.QWidget):
 			sld1 = QtGui.QSlider(QtCore.Qt.Horizontal,self)
 			sld1.setFixedSize(150,25)
 			tmpBox.addWidget(sld1)
-			sld2 = QtGui.QSlider(QtCore.Qt.Horizontal,self)
-			sld2.setFixedSize(150,25)
-			tmpBox.addWidget(sld2)
+			#sld2 = QtGui.QSlider(QtCore.Qt.Horizontal,self)
+			#sld2.setFixedSize(150,25)
+			#tmpBox.addWidget(sld2)
 
 			MainBox.addLayout(tmpBox)
 			self.slider_dict[elem] = sld1 
-			self.slider_opacity_dict[elem] = sld2
+			#self.slider_opacity_dict[elem] = sld2
 
 		self.setLayout(MainBox)
 	

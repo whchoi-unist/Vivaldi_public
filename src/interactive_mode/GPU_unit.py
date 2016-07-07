@@ -1609,7 +1609,7 @@ def run_function(function_package, function_name):
 	import numpy
 	if numpy.sum(fp.Sliders) != 0:
 		sld,_ = mod.get_global('slider')
-		sld_op,_ = mod.get_global('slider_opacity')
+		sld_op,_ = mod.get_global('slider1')
 
 		cuda.memcpy_htod_async(sld, fp.Sliders, stream=stream)
 		cuda.memcpy_htod_async(sld_op, fp.Slider_opacity, stream=stream)

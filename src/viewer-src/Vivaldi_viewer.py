@@ -117,7 +117,8 @@ class Vivaldi_viewer():
 	def get_sliders(self):
 		return numpy.array([self.slider.slider_dict[0].value(), self.slider.slider_dict[1].value(), self.slider.slider_dict[2].value(), self.slider.slider_dict[3].value()],dtype=numpy.int32)
 	def get_slider_opacity(self):
-		return numpy.array([self.slider.slider_opacity_dict[0].value(), self.slider.slider_opacity_dict[1].value(), self.slider.slider_opacity_dict[2].value(), self.slider.slider_opacity_dict[3].value()], dtype=numpy.int32)
+		#return numpy.array([self.slider.slider_opacity_dict[0].value(), self.slider.slider_opacity_dict[1].value(), self.slider.slider_opacity_dict[2].value(), self.slider.slider_opacity_dict[3].value()], dtype=numpy.int32)
+		return numpy.array([self.slider.slider_dict[4].value(), self.slider.slider_dict[5].value(), self.slider.slider_dict[6].value(), self.slider.slider_dict[7].value()],dtype=numpy.int32)
 	def get_sliders1(self):
 		return numpy.array([self.slider.slider_dict[4].value(), self.slider.slider_dict[5].value(), self.slider.slider_dict[6].value(), self.slider.slider_dict[7].value()],dtype=numpy.int32)
 	def get_slider_opacity1(self):
@@ -437,7 +438,22 @@ class Vivaldi_window(QtGui.QMainWindow):
 				a = Image.fromarray(self.widget.data)
 				a.save("./result/result-"+str(self.viewer_image_cnt)+".tif")
 				self.viewer_image_cnt+=1
-			elif event.key() == QtCore.Qt.Key_T:func_dict['T'](dummy)
+			#elif event.key() == QtCore.Qt.Key_T:func_dict['T'](dummy)
+			elif event.key() == QtCore.Qt.Key_T:
+				global slider_on
+				if slider_on == True:
+					ret_str = '['
+					for elem in range(8):
+						ret_str += str(self.slider.slider_dict[elem].value()) + ', '
+
+					ret_str += ']'
+
+					print "=============================="
+					print "	  SLIDER INFORMATION	  "
+					print "------------------------------"
+					print ret_str
+					print "=============================="
+
 			#elif event.key() == QtCore.Qt.Key_U:func_dict['U'](dummy)
 			elif event.key() == QtCore.Qt.Key_U:
 				self.update_widget()

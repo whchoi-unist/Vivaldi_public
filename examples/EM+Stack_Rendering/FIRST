@@ -1,0 +1,6 @@
+Elavl3GCaMP5G_7zf : green : 500 to 65535
+Elavl3H2BRFP_10zf : red : 1000 to 65535
+HcrtRFP_15zf : red : 8000 to 30000
+OxtlGFP_68zf : green : 2500 to 65535
+SpinalBackfills_23zf : red : 10000 to 65535
+Vglut2aGFP_15zf : green : 0 to 65535
