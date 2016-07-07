@@ -1,0 +1,293 @@
+# EM Volume rendering + Stack Volume Rendering
+# Fish : Original EM data 
+# Mask : Mask data
+# Brain : Stack data
+# x     : work range for x axis
+# y     : work range for y axis
+# transf : Transfer function for EM data
+# zbtransf : Transfer function for Mask data
+# min_val  : minmum value for Brain
+# max_val  : minmum value for Brain
+def render(Fish, Mask, Brain, x, y, transf, zbtransf, min_val, max_val):
+	ret_col = float4(0)								# initialize
+	local_iter = orthogonal_iter(Fish, x, y, 1.0)	# create rendering iterator (Orthogonal)
+
+
+	for elem in local_iter:
+		fish  = point_query_3d(Fish, elem)			# Sample in EM data
+		f_col = point_query_1d(transf, fish) 		# RGBA color for transfer function
+		ret_col = alpha_compositing(ret_col, f_col) # Alpha compositing
+
+		mask = point_query_3d(Mask, elem)			# Sample in Maks data
+
+		if mask > 0:								# mask > 0 means it locates in Brain
+			brain_elem = float3(elem.x / 990 * 464, elem.y / 860 * 404, elem.z / 1600 * 811)  # normalize corrodinates
+			brain = linear_query_3d(Brain, brain_elem)	# Sample in Stack data
+			b_col = float4(0)							# Brain color initialize
+			
+			if brain > min_val and brain < max_val:  	# Crop brain data from min_val to max_val
+				normalized_intensity = ((brain - min_val) / (1.0*(max_val - min_val) )) *255   	# Normalize brain data
+				b_col = point_query_1d(zbtransf, normalized_intensity)							# RGBA color for Stack
+				ret_col = alpha_compositing(ret_col, b_col)		# Alpha compositing
+
+	# change background to white
+	ret_col = background_white(ret_col)
+
+	return RGB(ret_col)
+	
+
+# EM Volume Rendering + Stack Maximum Projection
+# Fish : Original EM data 
+# Mask : Mask data
+# Brain : Stack data
+# x     : work range for x axis
+# y     : work range for y axis
+# transf : Transfer function for EM data
+# input_col : color for Stack data
+# min_val  : minmum value for Brain
+# max_val  : minmum value for Brain
+def max_intensity_rendering(Fish, Mask, Brain, x, y, transf, input_col, min_val, max_val):
+	ret_col = float4(0)								# initialize
+	local_iter = orthogonal_iter(Fish, x, y, 1.0)	# create rendering iterator (Orthogonal)
+
+	cnt = 0											# initialize counter for iterator
+	max_intensity = -99999.0						# initialize maximum intensity 
+	matched_cnt = 0									# initialize matched cnt for maximum intensity
+	for elem in local_iter:					
+		mask = point_query_3d(Mask, elem)			# Sample from mask data
+
+		if mask > 0:								# mask > 0 means it locates in Brain
+			brain_elem = float3(elem.x / 990 * 464, elem.y / 860 * 404, elem.z / 1600 * 811)  # normalize corrodinates
+			brain = linear_query_3d(Brain, brain_elem)	# Sample in Stack data
+
+			if brain > min_val and brain < max_val:  	# Crop brain data from min_val to max_val
+				if max_intensity < brain:			# Find maximum intensity
+					max_intensity = brain
+					matched_cnt = cnt
+					
+		cnt += 1
+
+	local_iter = orthogonal_iter(Fish, x, y, 1.0)	# create another iterator (Orthogonal)
+	cnt = 0
+	for elem in local_iter:
+		fish  = point_query_3d(Fish, elem)			# Sample in EM data
+		f_col = point_query_1d(transf, fish) 		# RGBA color for transfer function
+		ret_col = alpha_compositing(ret_col, f_col) # Alpha compositing
+ 
+		# rendering for Stack
+		if cnt == matched_cnt and cnt != 0:
+			normalized_intensity = 1.0				# Initialize
+			b_col = float4(input_col[0].x*normalized_intensity, input_col[0].y*normalized_intensity, input_col[0].z*normalized_intensity, 0)							
+			normalized_intensity = ((max_intensity - min_val) / (1.0*(max_val - min_val) )*0.9+0.1) 
+			b_col.w = normalized_intensity * 255
+			ret_col = alpha_compositing(ret_col, b_col)
+
+		cnt += 1
+
+	# change background to white
+	ret_col = background_white(ret_col)
+
+	return RGB(ret_col)
+
+
+# Project Maximum Intensity for Stack data
+# Fish : Original EM data 
+# Mask : Mask data
+# Brain : Stack data
+# x     : work range for x axis
+# y     : work range for y axis
+# transf : Transfer function for EM data
+# input_col : color for Stack data
+# min_val  : minmum value for Brain
+# max_val  : minmum value for Brain
+def max_intensity(Fish, Mask, Brain, x, y, transf, input_col, min_val, max_val):
+	ret_col = float4(0)								# initialize
+	local_iter = orthogonal_iter(Fish, x, y, 1.0)	# create rendering iterator (Orthogonal)
+
+	cnt = 0											# initialize counter for iterator
+	max_intensity = -99999.0						# initialize maximum intensity 
+	matched_cnt = 0									# initialize matched cnt for maximum intensity
+	for elem in local_iter:
+		mask = point_query_3d(Mask, elem)			# Sample from mask data
+
+		if mask > 0:								# mask > 0 means it locates in Brain
+			brain_elem = float3(elem.x / 990 * 464, elem.y / 860 * 404, elem.z / 1600 * 811)  # normalize corrodinates
+			brain = linear_query_3d(Brain, brain_elem)	# Sample in Stack data
+
+			if brain > min_val and brain < max_val:  	# Crop brain data from min_val to max_val
+				if max_intensity < brain:			# Find maximum intensity
+					max_intensity = brain
+					matched_cnt = cnt
+					
+		cnt += 1
+
+	# Initial color initializer
+	normalized_intensity = 1.0
+	b_col = float4(input_col[0].x*normalized_intensity, input_col[0].y*normalized_intensity, input_col[0].z*normalized_intensity, 0)
+
+	# Normalize intensity on a range from min to max
+	normalized_intensity = ((max_intensity - min_val) / (1.0*(max_val - min_val) )*0.9+0.1) 
+	b_col.w = normalized_intensity * 255
+	ret_col = alpha_compositing(ret_col, b_col)
+
+	# Change the background to white
+	#ret_col = background_white(ret_col)
+
+	return RGBA(ret_col)
+
+
+# EM Volume Rendering
+# Fish   : Original EM data
+# x      : work range for x axis
+# y      : work range for y axis
+# transf : Transfer function for EM data
+def EM_rendering(Fish, x, y, transf):
+	ret_col = float4(0)								# initialize
+	local_iter = orthogonal_iter(Fish, x, y, 1.0)	# create rendering iterator (Orthogonal)
+
+
+	for elem in local_iter:
+
+		fish  = point_query_3d(Fish, elem)
+		f_col = point_query_1d(transf, fish)
+		ret_col = alpha_compositing(ret_col, f_col)
+
+
+	ret_col.w *= 0.8
+
+	# Change the background to white
+	#ret_col = background_white(ret_col)
+
+	return RGBA(ret_col)
+
+# EM Volume Rendering
+# EMrendering 	 : Result for EM rendering
+# Stackrendering : Result for Stack rendering
+# x      : work range for x axis
+# y      : work range for y axis
+def combine(EMrendering, Stackrendering, x, y):
+	fish  = point_query_2d(Fish , x, y) 	#  Sample from EM rendering
+	brain = point_query_2d(Brain, x, y)		#  Sample from Stack rendering
+
+	ret_col = float4(0)
+	ret_col = alpha_compositing(fish, brain)
+
+	# Change the background to white
+	ret_col = background_white(ret_col)
+
+	return ret_col
+	
+	
+def main():
+	# EM data load
+	# DATA_PATH represents '/path/to/vivaldi/../data'
+	volume_ori   = load_data_3d(DATA_PATH+"/david/Zebrafish/David_fish.dat")
+	# Mask dat load
+	volume_mask  = load_data_3d(DATA_PATH+"/david/Mask/mask.dat")
+
+	# Transfer function for EM data is pre-defined
+	tr_data = open(DATA_PATH+"/david/TF/Zebrafish.tf","rb").read()
+	transf  = numpy.fromstring(tr_data, dtype=numpy.uint8).reshape(256,4).astype(numpy.float32)
+
+	import sys
+	# Parameter usage for this Vivaldi application
+	# If parameter is given:
+	#	render results for given Stack type
+	# If parameter is not given:
+	#	Ask which stack would be used
+	# 		Use target stack
+	if len(sys.argv) > 2:
+		target_num = int(sys.argv[2])
+		lines = open('FIRST').readlines()
+		target_img = lines[target_num-1].split(':')[0].replace(' ','')
+		color      = lines[target_num-1].split(':')[1].replace(' ','')
+		start_end  = lines[target_num-1].split(':')[2]
+
+		start = int(start_end[:start_end.find('to')])
+		end   = int(start_end[start_end.find('to')+2:])
+
+		import os
+		if os.path.isdir('result/%s'%target_img) == False:
+			os.system('mkdir -p result/%s'%target_img)
+		result_name_prefix = target_img+'/%s_%s_%03d.png'
+
+		angle_start = 0
+		acts        = 360
+
+	else:
+		lines = open('FIRST').readlines()
+		from print_colors import print_bold
+		print_bold('WHICH ONE DO YOU WANT TO RENDER?')
+		for elem in range(len(lines)):
+			print "   %d | %s"%(elem+1, lines[elem].split(' ')[0])
+
+		target_num = input()
+		target_img = lines[target_num-1].split(':')[0].replace(' ','')
+		color      = lines[target_num-1].split(':')[1].replace(' ','')
+		start_end  = lines[target_num-1].split(':')[2]
+
+		#
+		print_bold("DO YOU WANT TO COPY TF FROM MVMTX DIRECTORY? (y/n)")
+		reply = raw_input()
+		if reply == 'y':
+			import os
+			os.system("cp ~/mvmtx/1.tf ~/Project/Vivaldi/data/david/TF/%s.tf"%target_img)
+		
+
+		start = int(start_end[:start_end.find('to')])
+		end   = int(start_end[start_end.find('to')+2:])
+
+		result_name_prefix = '%s_%s_%03d.png'
+		angle_start = 90
+		acts        = 1
+
+
+	# Stack data load
+	volume_brain = load_data_3d(DATA_PATH+'/david/ZBrain/%s.dat'%target_img)
+	# Transfer function for Stack is loaded
+	tr_data1 = open(DATA_PATH+"/david/TF/%s.tf"%target_img,"rb").read()
+	transf1  = numpy.fromstring(tr_data1, dtype=numpy.uint8).reshape(256,4).astype(numpy.float32)
+
+	# Set color for given color
+	if color == "red":
+		input_col = numpy.array([[171, 15, 15, 255], [171, 15, 15, 255],[171, 15, 15, 255],[171, 15, 15, 255]],dtype=numpy.float32)
+	elif color == "green":
+		input_col = numpy.array([[73, 157, 75, 255],[73, 157, 75, 255],[73, 157, 75, 255],[73, 157, 75, 255]],dtype=numpy.float32)
+	elif color == "blue":
+		input_col = numpy.array([[25, 101, 176, 255],[25, 101, 176, 255],[73, 157, 75, 255],[73, 157, 75, 255]],dtype=numpy.float32)
+	elif color == "magenta":
+		input_col = numpy.array([[231, 41, 138, 255],[231, 41, 138, 255],[231, 41, 138, 255],[231, 41, 138, 255]],dtype=numpy.float32)
+
+
+	
+
+	from datetime import datetime 
+	today = "%02d%02d%02d"%(int(str(datetime.now().year)[2:]),(datetime.now().month),(datetime.now().day))     
+
+	for elem in range(0,acts):
+		LoadIdentity()
+		Rotate(elem+angle_start, 1, 0, 0)
+		Rotate(90, 0, 1, 0)
+
+		Translate(-990/2, -860/2, -1600/2)
+
+		## original
+		#result = render(volume_ori, volume_mask, volume_brain, x, y, transf, transf1, start, end).range(x=-1024:1024, y=-1024:1024)
+
+		## Maximum Intensity using two path
+		result = max_intensity_rendering(volume_ori, volume_mask, volume_brain, x, y, transf, input_col, start, end).range(x=-1024:1024, y=-1024:1024)
+
+		## Maximum Intensity using two results
+		#fish_result = EM_rendering(volume_ori, x, y, transf).range(x=-1024:1024, y=-1024:1024)
+		#projection = max_intensity(volume_ori, volume_mask, volume_brain, x, y, transf, input_col, start, end).range(x=-1024:1024, y=-1024:1024)
+		#result = combine(fish_result, projection, x, y).range(x=-1024:1024,y=-1024:1024)
+
+		# Store EM volume rendering only
+		#save_image(fish_result, result_name_prefix%(today, target_img, elem+20))
+		# Store Maximum projection result
+		#save_image(projection, result_name_prefix%(today, target_img, elem+40))
+
+		save_image(result, result_name_prefix%(today, target_img, elem))
+
+	import os
+	os.system('send_telegram done')
