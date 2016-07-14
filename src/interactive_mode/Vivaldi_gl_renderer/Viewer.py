@@ -12,7 +12,7 @@ from OpenGL.GL.EXT.geometry_shader4 import *
 
 import sys, time, math, numpy
 from Buffer import*
-from Draw import*
+#from Draw import*
 
 
 import os, sys

@@ -26,7 +26,7 @@ VIVALDI_PATH=$VIVALDI_HOME/src/interactive_mode
 vivaldi_path=$VIVALDI_HOME
 
 ################################################################
-LD_LIBRARY_PATH=$CUDA_LIB:$MPI_LIB:$GPMR_LIB:$LD_LIBRARY_PATH
+LD_LIBRARY_PATH=$CUDA_LIB:$MPI_LIB:$LD_LIBRARY_PATH
 PATH=$CUDA_BIN:$MPI_BIN:$VIVALDI_PATH:$PATH:$HOME/.bin:
 
 export LD_LIBRARY_PATH
