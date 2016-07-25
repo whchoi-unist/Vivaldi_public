@@ -237,8 +237,8 @@ def main():
 		if os.path.isdir('result/%s'%target_img) == False:
 			os.system('mkdir -p result/%s'%target_img)
 
-		start = int(start_end[:start_end.find('to')])
-		end   = int(start_end[start_end.find('to')+2:])
+		start = int(start_end[:start_end.find('to')])/255.0
+		end   = int(start_end[start_end.find('to')+2:])/255.0
 
 		result_name_prefix = '%s_%s_%03d.png'
 		angle_start = 90
@@ -246,7 +246,7 @@ def main():
 
 
 	# Stack data load
-	volume_brain = load_data_3d(DATA_PATH+'/david/ZBrain/%s.dat'%target_img)
+	volume_brain = load_data_3d(DATA_PATH+'/david/ZBrain/8bit/%s.dat'%target_img)
 	# Transfer function for Stack is loaded
 	tr_data1 = open(DATA_PATH+"/david/TF/%s.tf"%target_img,"rb").read()
 	transf1  = numpy.fromstring(tr_data1, dtype=numpy.uint8).reshape(256,4).astype(numpy.float32)
