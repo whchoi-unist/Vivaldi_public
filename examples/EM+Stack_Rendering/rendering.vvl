@@ -211,8 +211,10 @@ def main():
 			os.system('mkdir -p result/%s'%target_img)
 		result_name_prefix = target_img+'/%s_%s_%03d.png'
 
-		angle_start = 0
-		acts        = 360
+
+		angle_start = 0 if len(sys.argv) < 4 else int(sys.argv[3])
+		angle_end   = 360 if len(sys.argv) < 5 else int(sys.argv[4])
+		#acts        = 360
 
 	else:
 		lines = open('FIRST').readlines()
@@ -237,8 +239,14 @@ def main():
 		if os.path.isdir('result/%s'%target_img) == False:
 			os.system('mkdir -p result/%s'%target_img)
 
-		start = int(start_end[:start_end.find('to')])/255.0
-		end   = int(start_end[start_end.find('to')+2:])/255.0
+		# 8bit
+		#start = int(start_end[:start_end.find('to')])/255.0
+		#end   = int(start_end[start_end.find('to')+2:])/255.0
+
+		# 16bit
+		start = int(start_end[:start_end.find('to')])
+		end   = int(start_end[start_end.find('to')+2:])
+	
 
 		result_name_prefix = '%s_%s_%03d.png'
 		angle_start = 90
@@ -246,7 +254,11 @@ def main():
 
 
 	# Stack data load
-	volume_brain = load_data_3d(DATA_PATH+'/david/ZBrain/8bit/%s.dat'%target_img)
+	# 8bit 
+	#volume_brain = load_data_3d(DATA_PATH+'/david/ZBrain/8bit/%s.dat'%target_img)
+	# 16bit
+	volume_brain = load_data_3d(DATA_PATH+'/david/ZBrain/%s.dat'%target_img)
+
 	# Transfer function for Stack is loaded
 	tr_data1 = open(DATA_PATH+"/david/TF/%s.tf"%target_img,"rb").read()
 	transf1  = numpy.fromstring(tr_data1, dtype=numpy.uint8).reshape(256,4).astype(numpy.float32)
@@ -267,9 +279,9 @@ def main():
 	from datetime import datetime 
 	today = "%02d%02d%02d"%(int(str(datetime.now().year)[2:]),(datetime.now().month),(datetime.now().day))     
 
-	for elem in range(0,acts):
+	for elem in range(angle_start,angle_end):
 		LoadIdentity()
-		Rotate(elem+angle_start, 1, 0, 0)
+		Rotate(elem, 1, 0, 0)
 		Rotate(90, 0, 1, 0)
 
 		Translate(-990/2, -860/2, -1600/2)
