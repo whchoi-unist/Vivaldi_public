@@ -1,0 +1,46 @@
+USAGE for Stack rendering Examples
+
+========================================================================
+ Common
+
+a. When the examples are executed, the applications ask for users to 
+select which Stack would be used. The list of Stacks from a file "FIRST".
+
+b. As this application uses data which locations of them are already 
+determined, please follow the directory hierarchy
+  
+
+
+ VIVALDI  ------    src    ----------  interactive_mode
+            |                   |
+            |                   -----  viewer_src
+            |                   |
+            |                   -----  translator
+            |
+            ----   data    ----------  david  -----------  Zebrafish
+            |                                      |
+            |                                      ------  ZBrain
+            |                                      |
+            |                                      ------  TF
+            |                                      |
+            |                                      ------  Mask
+			----   examples
+
+
+------------------------------------------------------------------------
+
+1. rendering.vvl
+
+HOW TO USE
+
+vivaldi rendering.vvl [number for stack data : optional]
+
+
+a. It comprises three types of rendering
+
+  (1) 
+
+
+------------------------------------------------------------------------
+
+2. rendering_viewer.vvl

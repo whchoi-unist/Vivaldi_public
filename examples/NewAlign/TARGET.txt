@@ -1,0 +1,29 @@
+6p7FRhcrtRGal4uasKaede_12zf : green : 3000 to 40000
+Anti5HT_40zf : magenta : 15000 to 65535
+AntiGad67_17zf : magenta : 12000 to 65535
+AntiGlyR_160zf : magenta : 0 to 40000
+AntitERK_193zf : blue : 5000 to 50000
+AntiTH_10zf : magenta : 2000 to 45000
+AntiZn1_10zf : magenta : 8000 to 65535
+AntiZn12Hnk1_9zf : magenta : 1500 to 30000
+AntiZnp1Synaptotagmin2_118zf : magenta : 1500 to 32000
+AntiZrf1GFAP_5zf : magenta : 1000 to 65535
+AntiZrf2_5zf : magenta : 3000 to 65535
+Elavl3GCaMP5G_7zf : green : 500 to 65535 : *
+Elavl3H2BRFP_10zf : red : 1000 to 65535 : *
+EtVmat2GFP_55zf : green : 3500 to 50000
+Gad1bGFP_10zf : green : 300 to 65535
+Glyt2GFP_13zf : green : 900 to 40000
+HcrtRFP_15zf : red : 8000 to 30000 : *
+Isl1GFP_17zf : green : 4000 to 45000
+Isl2bGal4uasDendra_8zf : green : 900 to 30000
+Olig2GFP_12zf : green : 2000 to 65535
+OtpbAGal4UASGCaMP_19zf : green : 500 to 65535
+OtpbANsfbGFP_10zf : green : 4000 to 50000
+OxtlGFP_68zf : green : 2500 to 65535 : *
+Pet1GFP_13zf : green : 0 to 65535
+Ptf1aGal4uasKaede_11zf : green : 3000 to 42000
+QrfpGFP_15zf : green : 700 to 30000
+s1181tGal4uasKaede_14zf : green : 5000 to 40000
+SpinalBackfills_23zf : red : 10000 to 65535 : *
+Vglut2aGFP_15zf : green : 0 to 65535 : *
