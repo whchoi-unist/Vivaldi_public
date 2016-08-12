@@ -57,6 +57,8 @@ def hex_to_rgb(value):
 
 mapping_dict = {}
 
+
+
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
 		print "USAGE : python %s target_skeleton_file output_prefix"%sys.argv[0]
