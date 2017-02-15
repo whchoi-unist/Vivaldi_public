@@ -12,6 +12,7 @@ To install Vivaldi, it requires some packages to execution.
 We provides some of the prerequisites and installation commands.  
 If you have installed any of the packages, you don't need to follow corresponding commands.
 Following commands are executed in root mode.  
+Install commands are tested on Ubuntu >= 14.04  
 
 
 bashrc configure
