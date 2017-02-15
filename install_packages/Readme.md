@@ -2,47 +2,34 @@ Vivaldi Installation Prerequisite
 =====================
 
 bashrc configure
---------------------
+--
 
-
-*Add below lines on .bashrc*
-##### Below lines are adding path to library, binary, and Vivaldi
-##### If you already register the path, you do not need to add
+Add below lines at $HOME/.bashrc
+##### Below lines are adding path to library, binary, and Vivaldi  
+##### If you already register the path, you do not need to add  
                             
 - - -
 $vi ~/.bashrc
 
-MPI_HOME=/path/to/mpi
+MPI_HOME=/path/to/mpi  
+MPI_LIB=$MPI_HOME/lib  
+MPI_BIN=$MPI_HOME/bin  
 
-MPI_LIB=$MPI_HOME/lib
+CUDA_HOME=/path/to/cuda  
+CUDA_LIB=$CUDA_HOME/lib64  
+CUDA_BIN=$CUDA_HOME/bin  
 
-MPI_BIN=$MPI_HOME/bin
+VIVALDI_HOME=/path/to/vivaldi  
+VIVALDI_PATH=$VIVALDI_HOME/src/interactive_mode  
+vivaldi_path=$VIVALDI_HOME  
 
-CUDA_HOME=/path/to/cuda
+LD_LIBRARY_PATH=$CUDA_LIB:$MPI_LIB:$LD_LIBRARY_PATH  
+PATH=$CUDA_BIN:$MPI_BIN:$VIVALDI_PATH:$PATH:  
 
-
-
-CUDA_LIB=$CUDA_HOME/lib64
-
-CUDA_BIN=$CUDA_HOME/bin
-
-
-VIVALDI_HOME=/path/to/vivaldi
-
-VIVALDI_PATH=$VIVALDI_HOME/src/interactive_mode
-
-vivaldi_path=$VIVALDI_HOME
-
-LD_LIBRARY_PATH=$CUDA_LIB:$MPI_LIB:$LD_LIBRARY_PATH
-PATH=$CUDA_BIN:$MPI_BIN:$VIVALDI_PATH:$PATH:$HOME/.bin:
-
-export CUDA_ROOT=$CUDA_HOME
-
-export LD_LIBRARY_PATH
-
-export PATH
-
-export vivaldi_path
+export CUDA_ROOT=$CUDA_HOME  
+export LD_LIBRARY_PATH  
+export PATH  
+export vivaldi_path  
 
 
 - - -
