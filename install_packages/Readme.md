@@ -5,6 +5,9 @@ To install Vivaldi, it requires some packages to execution.
 * PyCuda > 2016.1  
 * OpenMPI > 1.10.2  
 * mpi4py > 2.0.0  
+* Python Image Library (PIL)
+* PyOpenGL
+* PyQt4
 
 We provides some of the prerequisites and installation commands.  
 If you have installed any of the packages, you don't need to follow corresponding commands.
@@ -103,7 +106,7 @@ $ python mpi4py_test.py
 - - -
 
 
-PI, PyOpenGL
+PIL, PyOpenGL
 -------------
 $sudo apt-get build-dep python-imaging  
 $sudo apt-get install libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev  
